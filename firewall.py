@@ -1,6 +1,6 @@
 from enum import Enum
 
-class GameState(Enum):
+class RunState(Enum):
     MENU_PRINCIPAL = 1
     OPTION = 2
     IN_GAME = 3
@@ -19,12 +19,12 @@ def showMenu():
     print("\n6 - Quitter")
 
 def run():
-    game_state = GameState.MENU_PRINCIPAL
+    game_state = RunState.MENU_PRINCIPAL
     running = True
 
     while running:
         match game_state:
-            case GameState.MENU_PRINCIPAL:
+            case RunState.MENU_PRINCIPAL:
                 showMenu()
                 choice = input("\nEntrer votre choix: ")
                 match choice:
@@ -37,33 +37,16 @@ def run():
                     case "4":
                         pass
                     case "5":
-                        game_state = GameState.OPTION
+                        game_state = RunState.OPTION
                     case "6":
                         running = False
                     case _:
                         print("Le choix n'est pas valide")
-            case GameState.OPTION:
+            case RunState.OPTION:
                 print("Option: retour au menu principal")
-                game_state = GameState.MENU_PRINCIPAL
+                game_state = RunState.MENU_PRINCIPAL
 
     print("Exiting game...")
-
-    
-
-def load():
-    pass
-
-def newGame():
-    pass
-
-def save():
-    pass
-
-def options():
-    pass
-
-def leave():
-    pass
 
 if __name__ == "__main__":
     run()
