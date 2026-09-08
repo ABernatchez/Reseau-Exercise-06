@@ -11,7 +11,7 @@ VIRUS = [
 GAMEMODES = ["Zombie", "King of The Hill", "Treasure Hunt", "Race to The Top"]
 
 class GameInfo():
-    firewallPlayer = ""
+    firewall_player = ""
     survivor1 = ""
     survivor2 = ""
     survivor3 = ""
@@ -31,7 +31,7 @@ class GameInfo():
         map = "",
         active_virus = []
     ):
-        self.firewallPlayer = firewall
+        self.firewall_player = firewall
         self.survivor1 = s1,
         self.survivor2 = s2
         self.survivor3 = s3
@@ -40,7 +40,7 @@ class GameInfo():
         self.active_virus = active_virus
 
     def reset(self):
-        self.firewallPlayer = ""
+        self.firewall_player = ""
         self.survivor1 = ""
         self.survivor2 = ""
         self.survivor3 = ""
@@ -64,15 +64,37 @@ class GameInfo():
     def getGameDisplay(self):
         str = f"\nFIREWALL\n----------\n"
         str += f"{self.gamemode} sur la map {self.map}\n"
-        str += f"Firewall: {self.firewallPlayer}\n"
+        str += f"Firewall: {self.firewall_player}\n"
         str += f"Survivants: {self.survivor1}, {self.survivor2}, {self.survivor3}\n"
         str += "----------\n"
         return str
 
+    def copy(self):
+        return GameInfo(
+            self.firewall_player,
+            self.survivor1,
+            self.survivor2,
+            self.survivor3,
+            self.gamemode,
+            self.map,
+            self.active_virus.copy(),
+        )
+
+    def from_dict(d):
+        return GameInfo(
+            d["firewall"],
+            d["survivor1"],
+            d["survivor2"],
+            d["survivor3"],
+            d["gamemode"],
+            d["map"],
+            d["active_virus"],
+        )
+
     #C'est pour la class Save
     def getDict(self):
         return {
-            "firewall" : self.firewallPlayer,
+            "firewall" : self.firewall_player,
             "survivor1" : self.survivor1,
             "survivor2" : self.survivor2,
             "survivor3" : self.survivor3,
@@ -90,14 +112,14 @@ def useVirus(game_info):
         virus.append(random.randint(0,7))
     
     print(game_info.firewallPlayer + ", choisie un virus a injecter: ")
-    isInvalid = True
-    while isInvalid:
+    is_invalid = True
+    while is_invalid:
         print("1 : " + VIRUS[virus[0]])
         print("2 : " + VIRUS[virus[1]])
         choix = input("Choix : ")
 
         if(choix in "1", "2"):
-            isInvalid = False
+            is_invalid = False
             game_info.addVirus(virus[int(choix)-1])
     
     announceVirus()
@@ -108,7 +130,7 @@ def runGame(game_info):
 
 def newGame():
     game_info = GameInfo()
-    game_info.firewallPlayer = input("Qui est le Firewall?: ")
+    game_info.firewall_player = input("Qui est le Firewall?: ")
     game_info.survivor1 = input("Qui est le premier survivant?: ")
     game_info.survivor2 = input("Qui est le second survivant?: ")
     game_info.survivor3 = input("Qui est le troisieme survivant?: ")

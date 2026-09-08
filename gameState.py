@@ -1,29 +1,27 @@
 import json
 from pathlib import Path
+from jouable import GameInfo
 
 class Save ():
     SAVE_LOCATION = "Data.json"
 
-    health = 100
-    dmg = 5
-    speed = 2
-    gameMaster = 3
+    volume = 10
+    game_info = None
 
     def __init__(self):
         if Path(self.SAVE_LOCATION).exists():
             with open("Data.json", "r") as f:
                 s_dict = json.loads(f.read())
-                self.health = s_dict["health"]
-                self.dmg = s_dict["damage"]
-                self.speed = s_dict["speed"]
-                self.gameMaster = s_dict["game_master"]
+
+                self.volume = s_dict["volume"]
+
+                if (s_dict["game_info"] != None):
+                    self.game_info = GameInfo.from_dict(s_dict["game_info"])
 
     def saveData(self):
         data = {
-            "health": self.health,
-            "damage": self.dmg,
-            "speed": self.speed,
-            "game_master": self.gameMaster
+            "volume": self.volume,
+            "game_info": self.game_info.getDict()
         }
         
         with open("Data.json", "w") as f:
