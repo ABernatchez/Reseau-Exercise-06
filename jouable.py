@@ -73,13 +73,10 @@ class GameInfo():
     def getDict(self):
         pass
 
-
-game_info = GameInfo()
-
 def announceVirus():
     print(f"{game_info.getLastVirus()} is active!")
 
-def useVirus():
+def useVirus(game_info):
     virus = []
     for e in range(0, 2):
         virus.append(random.randint(0,7))
@@ -97,20 +94,21 @@ def useVirus():
     
     announceVirus()
 
-def runGame():
-    game_info.gamemode = input("Choisissez le gamemode: ")
-    game_info.map = input("Quelle est la carte de jeu?: ")
-
+def runGame(game_info):
     print(game_info.getGameDisplay())
-    useVirus()
+    useVirus(game_info)
 
 def newGame():
-    game_info.reset()
+    game_info = GameInfo()
     game_info.firewallPlayer = input("Qui est le Firewall?: ")
     game_info.survivor1 = input("Qui est le premier survivant?: ")
     game_info.survivor2 = input("Qui est le second survivant?: ")
     game_info.survivor3 = input("Qui est le troisieme survivant?: ")
-    runGame() 
+    game_info.gamemode = input("Choisissez le gamemode: ")
+    game_info.map = input("Quelle est la carte de jeu?: ")
+    return game_info
+
 
 if __name__ == "__main__":
-    newGame()
+    game_info = newGame()
+    runGame(game_info)
