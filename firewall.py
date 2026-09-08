@@ -16,5 +16,17 @@ def run():
 def load():
     pass
 
+def newGame():
+    pass
+
+def save():
+    pass
+
+def options():
+    pass
+
+def leave():
+    pass
+
 if __name__ == "__main__":
     run()
