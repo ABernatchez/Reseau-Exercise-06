@@ -19,4 +19,5 @@ def load ():
     with open("Data.json", "r") as f:
         print(json.loads(f.read())["health"])
 
-#Source = https://www.geeksforgeeks.org/python/reading-and-writing-json-to-a-file-in-python/
+#Sources = https://www.geeksforgeeks.org/python/reading-and-writing-json-to-a-file-in-python/
+# https://www.w3schools.com/python/python_dictionaries_access.asp
