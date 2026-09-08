@@ -1,9 +1,13 @@
 from enum import Enum
+from gameState import Save
 
 class RunState(Enum):
     MENU_PRINCIPAL = 1
     OPTION = 2
     IN_GAME = 3
+
+class OptionChange():
+    pass
 
 
 def showMenu():
@@ -20,6 +24,7 @@ def showMenu():
 
 def run():
     game_state = RunState.MENU_PRINCIPAL
+    save = Save()
     running = True
 
     while running:
@@ -43,9 +48,11 @@ def run():
                     case _:
                         print("Le choix n'est pas valide")
             case RunState.OPTION:
+
                 print("Option: retour au menu principal")
                 game_state = RunState.MENU_PRINCIPAL
 
+    save.saveData()
     print("Exiting game...")
 
 if __name__ == "__main__":
