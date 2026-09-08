@@ -71,7 +71,15 @@ class GameInfo():
 
     #C'est pour la class Save
     def getDict(self):
-        pass
+        return {
+            "firewall" : self.firewallPlayer,
+            "survivor1" : self.survivor1,
+            "survivor2" : self.survivor2,
+            "survivor3" : self.survivor3,
+            "gamemode" : self.gamemode,
+            "map" : self.map,
+            "active_virus" : self.active_virus
+        }
 
 def announceVirus():
     print(f"{game_info.getLastVirus()} is active!")
