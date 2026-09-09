@@ -40,16 +40,18 @@ def run():
                 match choice:
                     case "1":
                         #Fonction run_game
-                        pass
+                        runGame(game_info)
                     case "2":
                         #Fonction new game et run_game
                         game_info = newGame()
+                        runGame(game_info)
                         print("\nNew game\n")
                     case "3":
                         if (save.game_info != None):
                             game_info = save.game_info.copy()
                             print("\nChargement de la partie...\nFaite\n")
                             # Fonction run_game
+                            runGame(game_info)
                         else:
                             print("\nAucune partie sauvegardé\n")
                     case "4":
