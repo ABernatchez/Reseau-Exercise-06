@@ -230,11 +230,11 @@ def roundStart(roundNumber):
     print("GO!")
 
 def allDead(game_info):
-    return(game_info.survivor_1_dead and game_info.survivor_2_dead and game_info.survivor_3_dead)
+    return game_info.survivor_1_dead and game_info.survivor_2_dead and game_info.survivor_3_dead
 
 def endRound(game_info):
     print("Round ended")
-    if(allDead):
+    if(allDead(game_info)):
         game_info.firewall_score += 5
     else :
         while True:
