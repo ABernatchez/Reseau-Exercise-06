@@ -24,6 +24,16 @@ def showMenu():
     print("6 - Quitter")
     print("------------------------------------\n")
 
+def showOptions():
+    print("\nFIREWALL: *courte description*")
+    print("Membre de l'équipe:")
+    print("    - Arnaud Bernatchez\n    - François-Xavier Thibault\n    - Grégoire Gionet\n    - Samuel Rodrigue\n")
+    
+    print("------------------------------------")
+    print("1 - Ajuster le volume")
+    print("2 - retour au menu principal")
+    print("------------------------------------\n")
+
 def run():
     save = Save()
     run_state = RunState.MENU_PRINCIPAL
@@ -71,8 +81,14 @@ def run():
                         print("Le choix n'est pas valide")
             case RunState.OPTION:
                 #TODO: ajouter volume comme option
-                print("Option: retour au menu principal")
-                run_state = RunState.MENU_PRINCIPAL
+                showOptions()
+                choice = input("\nEntrer votre choix: ")
+                match choice:
+                    case "1":
+                        NbVolume = input("\nEntrer votre volume choisi: ")
+                        save.volume = NbVolume
+                    case "2":
+                        run_state = RunState.MENU_PRINCIPAL
 
     save.saveData()
     print("Exiting game...")
