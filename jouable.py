@@ -56,7 +56,7 @@ class GameInfo():
     ):
         self.firewall_player = firewall
         self.firewall_score = firewall_score
-        self.survivor1 = s1,
+        self.survivor1 = s1
         self.s1_score=s1_score
         self.s1_dead=s1_dead
         self.survivor2 = s2
@@ -230,20 +230,21 @@ def endRound(game_info):
     print("Round ended")
     if(allDead):
         game_info.firewall_score += 5
-    while True:
-        winner = random.randint(1, 3)
-        if(winner == 3 and not game_info.survivor_3_dead):
-            game_info.survivor_3_score += 5
-            game_info.firewall_score += game_info.nb_kills
-            break
-        elif(winner == 2 and not game_info.survivor_2_dead):
-            game_info.survivor_2_score += 5
-            game_info.firewall_score += game_info.nb_kills
-            break
-        elif(winner == 1 and not game_info.survivor_1_dead):
-            game_info.survivor_1_score += 5
-            game_info.firewall_score += game_info.nb_kills
-            break
+    else :
+        while True:
+            winner = random.randint(1, 3)
+            if(winner == 3 and not game_info.survivor_3_dead):
+                game_info.survivor_3_score += 5
+                game_info.firewall_score += game_info.nb_kills
+                break
+            elif(winner == 2 and not game_info.survivor_2_dead):
+                game_info.survivor_2_score += 5
+                game_info.firewall_score += game_info.nb_kills
+                break
+            elif(winner == 1 and not game_info.survivor_1_dead):
+                game_info.survivor_1_score += 5
+                game_info.firewall_score += game_info.nb_kills
+                break
     game_info.nb_kills = 0
     game_info.survivor_1_dead = False
     game_info.survivor_2_dead = False

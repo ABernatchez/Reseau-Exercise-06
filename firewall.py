@@ -44,6 +44,8 @@ def run():
                     case "2":
                         #Fonction new game et run_game
                         game_info = newGame()
+                        save.game_info = game_info.copy()
+                        save.saveData()
                         runGame(game_info)
                         print("\nNew game\n")
                     case "3":
