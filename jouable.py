@@ -309,6 +309,7 @@ def eventSimulation(game_info):
             break
 
 def endGame(game_info):
+    print("Firewall :" + str(game_info.firewall_score))
     print("Survivor 1 :" + str(game_info.survivor_1_score))
     print("Survivor 2 :" + str(game_info.survivor_2_score))
     print("Survivor 3 :" + str(game_info.survivor_3_score))
