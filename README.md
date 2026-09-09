@@ -1,0 +1,1 @@
+Pour lancer le prototype, il faut d'abord lancer le firewall.py, ensuite entrer le nombre 1 pour continuer, nombre 2 pour une nouvelle partie, nombre 3 pour charger la partie
