@@ -169,7 +169,7 @@ class GameInfo():
             "active_virus" : self.active_virus
         }
 
-def announceVirus():
+def announceVirus(game_info):
     print(f"{game_info.getLastVirus()} is active!")
 
 def useVirus(game_info):
@@ -188,7 +188,7 @@ def useVirus(game_info):
             is_invalid = False
             game_info.addVirus(virus[int(choix)-1])
     
-    announceVirus()
+    announceVirus(game_info)
 
 def chooseGamemode():
     for e in range (0, len(GAMEMODES)):
@@ -252,13 +252,13 @@ def endRound(game_info):
 def killPlayer(game_info, player):
     if(player==1):
         game_info.survivor_1_dead=True
-        print(game_info.survivor1 + " est mort.")
+        print(str(game_info.survivor1) + " est mort.")
     elif(player==2):
         game_info.survivor_2_dead=True
-        print(game_info.survivor2 + " est mort.")
+        print(str(game_info.survivor2) + " est mort.")
     elif(player==3):
         game_info.survivor_3_dead=True
-        print(game_info.survivor3 + " est mort.")
+        print(str(game_info.survivor3) + " est mort.")
 
 def spawnObjet(game_info):
     objet = random.randint(0, 3)
