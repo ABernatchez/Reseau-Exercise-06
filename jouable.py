@@ -34,6 +34,7 @@ class GameInfo():
     gamemode = ""
     map = ""
 
+    round = 0
     active_virus = []
 
     def __init__(
@@ -52,6 +53,7 @@ class GameInfo():
         nb_kills=0,
         gamemode = "",
         map = "",
+        round = 0,
         active_virus = []
     ):
         self.firewall_player = firewall
@@ -68,6 +70,7 @@ class GameInfo():
         self.nb_kills=nb_kills
         self.gamemode = gamemode
         self.map = map
+        self.round = round
         self.active_virus = active_virus
 
     def reset(self):
@@ -85,13 +88,13 @@ class GameInfo():
         self.nb_kills=0
         self.gamemode = -1
         self.map = ""
+        self.round = 0
         self.active_virus = []
 
     def addVirus(self, index):
         if (index < 0 or index >= len(VIRUS)):
             raise ValueError(f"Index ({index}) devrait être entre 0 et {len(VIRUS)}")
 
-        #TODO: À place d'utiliser les valeurs, on pourrait utiliser l'index pour mettre dans la liste
         self.active_virus.append(VIRUS[index])
 
     def getGamemodeString(self):
@@ -127,6 +130,7 @@ class GameInfo():
             self.nb_kills,
             self.gamemode,
             self.map,
+            self.round,
             self.active_virus.copy(),
         )
 
@@ -146,6 +150,7 @@ class GameInfo():
             d["nb_kills"],
             d["gamemode"],
             d["map"],
+            d["round"],
             d["active_virus"],
         )
 
@@ -166,6 +171,7 @@ class GameInfo():
             "nb_kills" : self.nb_kills,
             "gamemode" : self.gamemode,
             "map" : self.map,
+            "round": self.round,
             "active_virus" : self.active_virus
         }
 
@@ -303,21 +309,26 @@ def eventSimulation(game_info):
             break
 
 def endGame(game_info):
-    #TODO Afficher les scores et nommer le grand gagnant.
     print("Survivor 1 :" + str(game_info.survivor_1_score))
     print("Survivor 2 :" + str(game_info.survivor_2_score))
     print("Survivor 3 :" + str(game_info.survivor_3_score))
-    pass
 
-    
+def round(game_info, round):
+    roundStart(round + 1)
+    useVirus(game_info)
+    eventSimulation(game_info)
+    endRound(game_info)
 
 def runGame(game_info):
     print(game_info.getGameDisplay())
-    for e in range(0, 3):
-        roundStart(e + 1)
-        useVirus(game_info)
-        eventSimulation(game_info)
-        endRound(game_info)
+    for e in range(game_info.round, 3):
+        round(game_info, e)
+        game_info.round = e + 1
+
+        quit = input("Voulez-vous retourner au menu(y/n)?: ")
+        if (quit == 'y'):
+            return
+
     endGame(game_info)
 
 def newGame():
