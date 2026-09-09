@@ -319,14 +319,19 @@ def round(game_info, round):
     eventSimulation(game_info)
     endRound(game_info)
 
+def shouldQuit(round):
+    if round == 2:
+        return False
+
+    return input("Voulez-vous retourner au menu(y/n)?: ") == 'y'
+
 def runGame(game_info):
     print(game_info.getGameDisplay())
     for e in range(game_info.round, 3):
         round(game_info, e)
         game_info.round = e + 1
 
-        quit = input("Voulez-vous retourner au menu(y/n)?: ")
-        if (quit == 'y'):
+        if (shouldQuit(e)):
             return
 
     endGame(game_info)
