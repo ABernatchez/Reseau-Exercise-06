@@ -9,7 +9,6 @@ class RunState(Enum):
 class OptionChange():
     pass
 
-
 def showMenu():
     print("\nFIREWALL: *courte description*")
     print("Membre de l'équipe:")
@@ -80,7 +79,7 @@ def run():
                     case _:
                         print("Le choix n'est pas valide")
             case RunState.OPTION:
-                #TODO: ajouter volume comme option
+                #Options
                 showOptions()
                 choice = input("\nEntrer votre choix: ")
                 match choice:

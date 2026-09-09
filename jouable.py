@@ -304,7 +304,20 @@ def eventSimulation(game_info):
 
 def endGame(game_info):
     #TODO Afficher les scores et nommer le grand gagnant.
+    Place = findHigherScore(game_info.survivor_1_score, game_info.survivor_2_score)
+    firstPlace = findHigherScore(Place, game_info.survivor_3_score)
+    print("Survivor 1 :" + str(game_info.survivor_1_score))
+    print("Survivor 2 :" + str(game_info.survivor_2_score))
+    print("Survivor 3 :" + str(game_info.survivor_3_score))
+    print("Winner :" + str(firstPlace))
     pass
+
+def findHigherScore(player1_score, player2_score):
+    if (player1_score > player2_score):
+        return player1_score
+    else:
+        return player2_score
+    
 
 def runGame(game_info):
     print(game_info.getGameDisplay())
