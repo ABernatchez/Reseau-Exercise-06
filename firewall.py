@@ -47,9 +47,13 @@ def run():
                 showMenu()
                 choice = input("\nEntrer votre choix: ")
                 match choice:
-                    case "1":
-                        #Fonction run_game
-                        runGame(game_info)
+                    case "1":                        
+                        if (game_info != None):
+                            print("\nSauvegarde trouvée\n")
+                            #Fonction run_game
+                            runGame(game_info)
+                        else:
+                            print("\nAucune partie sauvegarder\n")
                     case "2":
                         #Fonction new game et run_game
                         game_info = newGame()
