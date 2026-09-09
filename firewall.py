@@ -6,9 +6,6 @@ class RunState(Enum):
     MENU_PRINCIPAL = 1
     OPTION = 2
 
-class OptionChange():
-    pass
-
 def showMenu():
     print("\nFIREWALL: *courte description*")
     print("Membre de l'équipe:")
@@ -49,23 +46,16 @@ def run():
                 match choice:
                     case "1":                        
                         if (game_info != None):
-                            print("\nSauvegarde trouvée\n")
-                            #Fonction run_game
                             runGame(game_info)
                         else:
-                            print("\nAucune partie sauvegarder\n")
+                            print("\nPas de partie commencé.\n")
                     case "2":
-                        #Fonction new game et run_game
                         game_info = newGame()
-                        save.game_info = game_info.copy()
-                        save.saveData()
                         runGame(game_info)
-                        print("\nNew game\n")
                     case "3":
                         if (save.game_info != None):
                             game_info = save.game_info.copy()
                             print("\nChargement de la partie...\nFaite\n")
-                            # Fonction run_game
                             runGame(game_info)
                         else:
                             print("\nAucune partie sauvegardé\n")
@@ -81,7 +71,7 @@ def run():
                     case "6":
                         running = False
                     case _:
-                        print("Le choix n'est pas valide")
+                        print("\nLe choix n'est pas valide\n")
             case RunState.OPTION:
                 #Options
                 showOptions()
