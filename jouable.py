@@ -82,16 +82,21 @@ class GameInfo():
         str += "----------\n"
         return str
 
-    def is_survivor_dead(self, index):
+    def get_survivor(self, index):
         match index:
             case 1:
-                return self.survivor_1.is_dead
+                return self.survivor_1
             case 2:
-                return self.survivor_2.is_dead
+                return self.survivor_2
             case 3:
-                return self.survivor_3.is_dead
+                return self.survivor_3
             case _:
-                raise ValueError("Index est hors de la porté.")
+                raise ValueError(f"L'index ({index}) devrait être entre 1 et 3.")
+
+
+    def is_survivor_dead(self, index):
+        self.get_survivor(index).is_dead
+                
 
     def are_survivors_dead(self):
         return self.survivor_1.is_dead and self.survivor_2.is_dead and self.survivor_3.is_dead
@@ -103,6 +108,9 @@ class GameInfo():
             self.survivor_2.score += points
         if not self.survivor_3.is_dead:
             self.survivor_3.score += points
+
+    def kill_player(self, index):
+        self.get_survivor(index).is_dead = True
 
     def reset_round(self):
         self.survivor_1.is_dead = False
@@ -222,15 +230,9 @@ def endRound(game_info):
     game_info.reset_round()
 
 def killPlayer(game_info, player):
-    if(player==1):
-        game_info.survivor_1.is_dead = True
-        print(str(game_info.survivor_1.name) + " est mort.")
-    elif(player==2):
-        game_info.survivor_2.is_dead = True
-        print(str(game_info.survivor_2.name) + " est mort.")
-    elif(player==3):
-        game_info.survivor_3.is_dead = True
-        print(str(game_info.survivor_3.name) + " est mort.")
+    game_info.kill_player(player)
+    print(str(game_info.get_survivor(player).name) + " est mort.")
+
 
 def spawnObjet(game_info):
     objet = random.randint(0, 3)
