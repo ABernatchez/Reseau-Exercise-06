@@ -96,6 +96,14 @@ class GameInfo():
     def are_survivors_dead(self):
         return self.survivor_1.is_dead and self.survivor_2.is_dead and self.survivor_3.is_dead
 
+    def points_for_alive_players(self, points):
+        if not self.survivor_1.is_dead:
+            self.survivor_1.score += points
+        if not self.survivor_2.is_dead:
+            self.survivor_2.score += points
+        if not self.survivor_3.is_dead:
+            self.survivor_3.score += points
+
     def reset_round(self):
         self.survivor_1.is_dead = False
         self.survivor_2.is_dead = False
@@ -209,20 +217,8 @@ def endRound(game_info):
     if(game_info.are_survivors_dead()):
         game_info.firewall_score += 5
     else :
-        while True:
-            winner = random.randint(1, 3)
-            if(winner == 3 and not game_info.is_survivor_dead(1)):
-                game_info.survivor_3.score += 5
-                game_info.firewall_score += game_info.nb_kills
-                break
-            elif(winner == 2 and not game_info.is_survivor_dead(2)):
-                game_info.survivor_2.score += 5
-                game_info.firewall_score += game_info.nb_kills
-                break
-            elif(winner == 1 and not game_info.is_survivor_dead(3)):
-                game_info.survivor_1.score += 5
-                game_info.firewall_score += game_info.nb_kills
-                break
+        game_info.points_for_alive_players(5)
+        game_info.firewall_score += game_info.nb_kills
     game_info.reset_round()
 
 def killPlayer(game_info, player):
