@@ -145,9 +145,11 @@ class GameInfo():
         }
 
 
-def choose_choice(choice, message):
+def choose_choice(choice, message, title):
+    print(f"\n{title}\n------------------------------------")
     for e in range (0, len(choice)):
         print(str(e + 1) + ": " + choice[e])
+    print("------------------------------------\n")
 
     while True:
         choix = input(message)
@@ -185,11 +187,11 @@ def roundStart(roundNumber):
     print("1...")
     print("2...")
     print("3...")
-    print("GO!")
+    print("GO!\n")
 
 
 def endRound(game_info):
-    print("Round ended")
+    print("-- End of round --\n")
     if(game_info.are_survivors_dead()):
         game_info.firewall_score += 5
     else :
@@ -221,7 +223,7 @@ def spawnObjet(game_info):
 
 
 def eventSimulation(game_info):
-    print ("-- Simulateur d'évènement (Admin) --")
+    print ("\n-- Simulateur d'évènement (Admin) --")
     while True:
         print("1: Survivant 1 meurt")
         print("2: Survivant 2 meurt")
@@ -229,6 +231,7 @@ def eventSimulation(game_info):
         print("4: Un objet apparaît")
         print("5: Mettre fin à la simulation")
         choix = input("Que ce passe t'il?: ")
+        print()
 
         if(choix == "1" and not game_info.is_survivor_dead(1)):
             killPlayer(game_info, 1)
@@ -246,6 +249,7 @@ def eventSimulation(game_info):
         if(game_info.are_survivors_dead()):
             print("Tous les survivants sont morts. La manche est finie.")
             break
+        print()
 
 def endGame(game_info):
     print("Firewall :" + str(game_info.firewall_score))
@@ -276,6 +280,7 @@ def runGame(game_info):
 
         if (shouldQuit(e)):
             return
+        print()
 
     endGame(game_info)
 
@@ -286,8 +291,8 @@ def newGame():
     game_info.survivor_1 = Survivor(input("Qui est le premier survivant?: "))
     game_info.survivor_2 = Survivor(input("Qui est le second survivant?: "))
     game_info.survivor_3 = Survivor(input("Qui est le troisieme survivant?: "))
-    game_info.gamemode = choose_choice(GAMEMODES, "Choisissez le gamemode: ")
-    game_info.map = choose_choice(MAP, "Choisissez la carte: ")
+    game_info.gamemode = choose_choice(GAMEMODES, "Choisissez le gamemode: ", "Game Modes")
+    game_info.map = choose_choice(MAP, "Choisissez la carte: ", "Cartes")
     return game_info
 
 
