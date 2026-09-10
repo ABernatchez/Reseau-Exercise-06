@@ -1,21 +1,5 @@
 import random
-
-VIRUS = [
-    "Bouncy Castle", 
-    "Invisible Men", 
-    "Like The Dinosaures", 
-    "Texture Not Found", 
-    "Upside Down All Around", 
-    "Black Hole", 
-    "Lag Spike"
-]
-GAMEMODES = ["Zombie", "King of The Hill", "Treasure Hunt", "Race to The Top"]
-
-MAP = ["Coconut Mall", "Mid-City Zoo", "Mega Arch Park"]
-
-OBJETS = ["Boom Box", "Office Chair", "Toy Gun", "Pogo Stick"]
-
-EFFET_OBJETS = [" a jouer une musique explosive!", " a roulé à toute allure loin de son bureau!", " a fais croire aux autres qu'Andy était là!", " a sauté au dessus de tous le chaos!"]
+from constant import VIRUS, GAMEMODES, MAP, OBJETS, EFFET_OBJETS
 
 
 class Survivor():
@@ -259,6 +243,7 @@ def eventSimulation(game_info):
         print("4: Un objet apparaît")
         print("5: Mettre fin à la simulation")
         choix = input("Que ce passe t'il?: ")
+
         if(choix == "1" and not game_info.is_survivor_dead(1)):
             killPlayer(game_info, 1)
         elif(choix == "2" and not game_info.is_survivor_dead(2)):
@@ -271,6 +256,7 @@ def eventSimulation(game_info):
             break
         else:
             print("Entrée invalide. Veuillez réessayer.") 
+        
         if(game_info.are_survivors_dead()):
             print("Tous les survivants sont morts. La manche est finie.")
             break
