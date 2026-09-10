@@ -19,7 +19,7 @@ class Game():
             self.game_info = self.save.game_info.copy()
 
     def show_menu():
-        print("\nFIREWALL: *courte description*")
+        print("\nFIREWALL: un jeu où trois joueurs essayent de survivre au Firewall en rencontrant des bugs en chemin")
         print("Membre de l'équipe:")
         print("    - Arnaud Bernatchez\n    - François-Xavier Thibault\n    - Grégoire Gionet\n    - Samuel Rodrigue\n")
 
@@ -33,7 +33,7 @@ class Game():
         print("------------------------------------\n")
 
     def show_options():
-        print("\nFIREWALL: *courte description*")
+        print("\nFIREWALL: un jeu où trois joueurs essayent de survivre au Firewall en rencontrant des bugs en chemin")
         print("Membre de l'équipe:")
         print("    - Arnaud Bernatchez\n    - François-Xavier Thibault\n    - Grégoire Gionet\n    - Samuel Rodrigue\n")
 
