@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from jouable import GameInfo
+from game_loop import GameInfo
 
 class Save ():
     SAVE_LOCATION = "Data.json"

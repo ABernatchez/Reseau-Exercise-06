@@ -1,6 +1,6 @@
 from enum import Enum
-from gameState import Save
-from jouable import newGame, runGame
+from helper import Save
+from game_loop import newGame, runGame
 
 class RunState(Enum):
     MENU_PRINCIPAL = 1
