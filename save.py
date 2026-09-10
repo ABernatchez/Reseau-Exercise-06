@@ -8,6 +8,7 @@ class Save ():
     volume = 10
     game_info = None
 
+    ## Créer la save en essayant de loader les informations
     def __init__(self):
         if Path(self.SAVE_LOCATION).exists():
             with open("Data.json", "r") as f:
@@ -18,6 +19,7 @@ class Save ():
                 if (s_dict["game_info"] != None):
                     self.game_info = GameInfo.from_dict(s_dict["game_info"])
 
+    ## Save les informations à l'endroit dans SAVE_LOCATION
     def saveData(self):
         data = {
             "volume": self.volume,

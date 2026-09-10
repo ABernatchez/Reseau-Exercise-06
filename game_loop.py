@@ -43,21 +43,26 @@ class GameInfo():
     round = 0
     active_virus = []
 
+    ## Ajoute un virus à active_virus. Ne peut pas dépassé la longueur de la constante VIRUS
     def addVirus(self, index):
         if (index < 0 or index >= len(VIRUS)):
             raise ValueError(f"Index ({index}) devrait être entre 0 et {len(VIRUS)}")
 
         self.active_virus.append(VIRUS[index])
 
+    ## Donne la version texte du game mode
     def getGamemodeString(self):
         return GAMEMODES[int(self.gamemode) - 1]
 
+    ## Donne la version texte du la carte
     def getMapString(self):
         return MAP[int(self.map) - 1]
 
+    ## Donne la Le dernier virus
     def getLastVirus(self):
         return self.active_virus[len(self.active_virus) - 1]
 
+    ## Donne une version texte de GameInfo
     def getGameDisplay(self):
         str = f"\nFIREWALL\n----------\n"
         str += f"{self.getGamemodeString()} sur la map: {self.getMapString()}\n"
@@ -66,6 +71,7 @@ class GameInfo():
         str += "----------\n"
         return str
 
+    ## Retourne le survivant dépendant de l'index
     def get_survivor(self, index):
         match index:
             case 1:
@@ -77,14 +83,15 @@ class GameInfo():
             case _:
                 raise ValueError(f"L'index ({index}) devrait être entre 1 et 3.")
 
-
+    ## Retourne si le survivant est mort à partir de l'index
     def is_survivor_dead(self, index):
         self.get_survivor(index).is_dead
                 
-
+    ## Retourne si tous les survivants sont morts
     def are_survivors_dead(self):
         return self.survivor_1.is_dead and self.survivor_2.is_dead and self.survivor_3.is_dead
 
+    ## Donne le nombre de point au joueur en vie
     def points_for_alive_players(self, points):
         if not self.survivor_1.is_dead:
             self.survivor_1.score += points
@@ -93,6 +100,7 @@ class GameInfo():
         if not self.survivor_3.is_dead:
             self.survivor_3.score += points
 
+    ## Tue le joueur dépendamment de l'index
     def kill_player(self, index):
         self.get_survivor(index).is_dead = True
 
@@ -102,6 +110,7 @@ class GameInfo():
         self.survivor_3.is_dead = False
         self.nb_kills = 0
 
+    ## Donne une nested copy de GameInfo
     def copy(self):
         state = GameInfo()
         state.firewall_player = self.firewall_player
@@ -116,6 +125,7 @@ class GameInfo():
         state.active_virus = self.active_virus.copy()
         return state
 
+    ## Créer GameInfo à partir d'un dictionnaire
     def from_dict(d):
         state = GameInfo()
         state.firewall_player = d["firewall_name"]
@@ -130,6 +140,7 @@ class GameInfo():
         state.active_virus = d["active_virus"]
         return state
 
+    # Retourne un dictionnaire à partir des valeurs de GameInfo
     def get_saveable_state(self):
         return {
             "firewall_name" : self.firewall_player,
@@ -145,6 +156,7 @@ class GameInfo():
         }
 
 
+#Permet de choisir entre les choix donné dans choice en affichant un message et un titre
 def choose_choice(choice, message, title):
     print(f"\n{title}\n------------------------------------")
     for e in range (0, len(choice)):
