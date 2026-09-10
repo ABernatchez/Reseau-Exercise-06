@@ -145,6 +145,18 @@ class GameInfo():
         }
 
 
+def choose_choice(choice, message):
+    for e in range (0, len(choice)):
+        print(str(e + 1) + ": " + choice[e])
+
+    while True:
+        choix = input(message)
+        if(int(choix) in range(1, len(choice)+1)):
+            return choix
+        else:
+            print("Entrée invalide. Veuillez réessayer.\n")
+
+
 def announceVirus(game_info):
     print(f"{game_info.getLastVirus()} is active!")
 
@@ -168,34 +180,6 @@ def useVirus(game_info):
     announceVirus(game_info)
 
 
-def chooseGamemode():
-    for e in range (0, len(GAMEMODES)):
-        number = e + 1
-        print(str(number) + ": " + GAMEMODES[e])
-    is_invalid = True
-    while is_invalid:
-        choix = input("Choisissez le gamemode: ")
-        if(choix in ("1", "2", "3", "4")):
-            is_invalid = False
-            return choix
-        else:
-            print("Entrée invalide. Veuillez réessayer.") 
-
-
-def chooseMap():
-    for e in range (0, len(MAP)):
-        number = e + 1
-        print(str(number) + ": " + MAP[e])
-    is_invalid = True
-    while is_invalid:
-        choix = input("Choisissez la carte: ")
-        if(choix in ("1", "2", "3")):
-            is_invalid = False
-            return choix
-        else:
-            print("Entrée invalide. Veuillez réessayer.") 
-
-
 def roundStart(roundNumber):
     print("-- Round " + str(roundNumber) + " --")
     print("1...")
@@ -212,6 +196,7 @@ def endRound(game_info):
         game_info.points_for_alive_players(5)
         game_info.firewall_score += game_info.nb_kills
     game_info.reset_round()
+
 
 def killPlayer(game_info, player):
     game_info.kill_player(player)
@@ -233,6 +218,7 @@ def spawnObjet(game_info):
         print(game_info.survivor_3.name + EFFET_OBJETS[objet])
     else:
         print("Le code indésirable a été effacé.")
+
 
 def eventSimulation(game_info):
     print ("-- Simulateur d'évènement (Admin) --")
@@ -267,17 +253,20 @@ def endGame(game_info):
     print("Survivor 2 :" + str(game_info.survivor_2.score))
     print("Survivor 3 :" + str(game_info.survivor_3.score))
 
+
 def round(game_info, round):
     roundStart(round + 1)
     useVirus(game_info)
     eventSimulation(game_info)
     endRound(game_info)
 
+
 def shouldQuit(round):
     if round == 2:
         return False
 
     return input("Voulez-vous retourner au menu(y/n)?: ") == 'y'
+
 
 def runGame(game_info):
     print(game_info.getGameDisplay())
@@ -290,14 +279,15 @@ def runGame(game_info):
 
     endGame(game_info)
 
+
 def newGame():
     game_info = GameInfo()
     game_info.firewall_player = input("Qui est le Firewall?: ")
     game_info.survivor_1 = Survivor(input("Qui est le premier survivant?: "))
     game_info.survivor_2 = Survivor(input("Qui est le second survivant?: "))
     game_info.survivor_3 = Survivor(input("Qui est le troisieme survivant?: "))
-    game_info.gamemode = chooseGamemode()
-    game_info.map = chooseMap()
+    game_info.gamemode = choose_choice(GAMEMODES, "Choisissez le gamemode: ")
+    game_info.map = choose_choice(MAP, "Choisissez la carte: ")
     return game_info
 
 

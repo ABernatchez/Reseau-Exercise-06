@@ -28,6 +28,5 @@ class Save ():
             json_str = json.dumps(data, indent=4)
             f.write(json_str)
 
-
 #Sources = https://www.geeksforgeeks.org/python/reading-and-writing-json-to-a-file-in-python/
 # https://www.w3schools.com/python/python_dictionaries_access.asp
