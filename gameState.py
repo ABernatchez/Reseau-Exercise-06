@@ -21,7 +21,7 @@ class Save ():
     def saveData(self):
         data = {
             "volume": self.volume,
-            "game_info": None if self.game_info == None else self.game_info.getDict()
+            "game_info": None if self.game_info == None else self.game_info.get_saveable_state()
         }
         
         with open("Data.json", "w") as f:

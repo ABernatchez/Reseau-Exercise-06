@@ -17,18 +17,40 @@ OBJETS = ["Boom Box", "Office Chair", "Toy Gun", "Pogo Stick"]
 
 EFFET_OBJETS = [" a jouer une musique explosive!", " a roulé à toute allure loin de son bureau!", " a fais croire aux autres qu'Andy était là!", " a sauté au dessus de tous le chaos!"]
 
+
+class Survivor():
+    name = ""
+    score = 0
+    is_dead = False
+
+    def __init__(self, name):
+        if not isinstance(name, str):
+            raise ValueError("Le nom d'un survivant devrait être un string.")
+
+        self.name = name
+
+    ## Permet de charger un survivant à partir
+    def load(name, score, is_dead):
+        s = Survivor(name)
+        s.score = score
+        s.is_dead = is_dead
+        return s
+
+    ## Retourne un objet Survivor à partir d'un dictionnaire
+    def from_saveable_state(s_state):
+        return Survivor.load(s_state["name"], s_state["score"], s_state["is_dead"])
+
+    ## Retourne un dictionnaire (Hashmap) qui permet de sauvegarder ses informations
+    def get_saveable_state(self):
+        return {"name": self.name, "score": self.score, "is_dead": self.is_dead}
+
+
 class GameInfo():
     firewall_player = ""
     firewall_score = 0
-    survivor1 = ""
-    survivor_1_score = 0
-    survivor_1_dead = False
-    survivor2 = ""
-    survivor_2_score = 0
-    survivor_2_dead = False
-    survivor3 = ""
-    survivor_3_score = 0
-    survivor_3_dead = False
+    survivor_1 = None
+    survivor_2 = None
+    survivor_3 = None
     nb_kills = 0
 
     gamemode = ""
@@ -36,60 +58,6 @@ class GameInfo():
 
     round = 0
     active_virus = []
-
-    def __init__(
-        self, 
-        firewall = "", 
-        firewall_score=0,
-        s1 = "", 
-        s1_score=0,
-        s1_dead=False,
-        s2 = "", 
-        s2_score=0,
-        s2_dead=False,
-        s3 = "",
-        s3_score=0,
-        s3_dead=False,
-        nb_kills=0,
-        gamemode = "",
-        map = "",
-        round = 0,
-        active_virus = []
-    ):
-        self.firewall_player = firewall
-        self.firewall_score = firewall_score
-        self.survivor1 = s1
-        self.s1_score=s1_score
-        self.s1_dead=s1_dead
-        self.survivor2 = s2
-        self.s2_score=s2_score
-        self.s2_dead=s2_dead
-        self.survivor3 = s3
-        self.s3_score=s3_score
-        self.s3_dead=s3_dead
-        self.nb_kills=nb_kills
-        self.gamemode = gamemode
-        self.map = map
-        self.round = round
-        self.active_virus = active_virus
-
-    def reset(self):
-        self.firewall_player = ""
-        self.firewall_score = 0
-        self.survivor1 = ""
-        self.s1_score=0
-        self.s1_dead=False
-        self.survivor2 = ""
-        self.s2_score=0
-        self.s2_dead=False
-        self.survivor3 = ""
-        self.s3_score=0
-        self.s3_dead=False
-        self.nb_kills=0
-        self.gamemode = -1
-        self.map = ""
-        self.round = 0
-        self.active_virus = []
 
     def addVirus(self, index):
         if (index < 0 or index >= len(VIRUS)):
@@ -110,64 +78,65 @@ class GameInfo():
         str = f"\nFIREWALL\n----------\n"
         str += f"{self.getGamemodeString()} sur la map: {self.getMapString()}\n"
         str += f"Firewall: {self.firewall_player}\n"
-        str += f"Survivants: {self.survivor1}, {self.survivor2}, {self.survivor3}\n"
+        str += f"Survivants: {self.survivor_1.name}, {self.survivor_2.name}, {self.survivor_3.name}\n"
         str += "----------\n"
         return str
 
+    def is_survivor_dead(self, index):
+        match index:
+            case 1:
+                return self.survivor_1.is_dead
+            case 2:
+                return self.survivor_2.is_dead
+            case 3:
+                return self.survivor_3.is_dead
+            case _:
+                raise ValueError("Index est hors de la porté.")
+
+    def are_survivors_dead(self):
+        return self.survivor_1.is_dead and self.survivor_2.is_dead and self.survivor_3.is_dead
+
+    def reset_round(self):
+        self.survivor_1.is_dead = False
+        self.survivor_2.is_dead = False
+        self.survivor_3.is_dead = False
+        self.nb_kills = 0
+
     def copy(self):
-        return GameInfo(
-            self.firewall_player,
-            self.firewall_score,
-            self.survivor1,
-            self.s1_score,
-            self.s1_dead,
-            self.survivor2,
-            self.s2_score,
-            self.s2_dead,
-            self.survivor3,
-            self.s3_score,
-            self.s3_dead,
-            self.nb_kills,
-            self.gamemode,
-            self.map,
-            self.round,
-            self.active_virus.copy(),
-        )
+        state = GameInfo()
+        state.firewall_player = self.firewall_player
+        state.firewall_score = self.firewall_score
+        state.survivor_1 = self.survivor_1
+        state.survivor_2 = self.survivor_2
+        state.survivor_3 = self.survivor_3
+        state.nb_kills = self.nb_kills
+        state.gamemode = self.gamemode
+        state.map = self.map
+        state.round = self.round
+        state.active_virus = self.active_virus.copy()
+        return state
 
     def from_dict(d):
-        return GameInfo(
-            d["firewall"],
-            d["firewall_score"],
-            d["survivor1"],
-            d["s1_score"],
-            d["s1_dead"],
-            d["survivor2"],
-            d["s2_score"],
-            d["s2_dead"],
-            d["survivor3"],
-            d["s3_score"],
-            d["s3_dead"],
-            d["nb_kills"],
-            d["gamemode"],
-            d["map"],
-            d["round"],
-            d["active_virus"],
-        )
+        state = GameInfo()
+        state.firewall_player = d["firewall_name"]
+        state.firewall_score = d["firewall_score"]
+        state.survivor_1 = Survivor.from_saveable_state(d["survivor_1"])
+        state.survivor_2 = Survivor.from_saveable_state(d["survivor_2"])
+        state.survivor_3 = Survivor.from_saveable_state(d["survivor_3"])
+        state.nb_kills = d["nb_kills"]
+        state.gamemode = d["gamemode"]
+        state.map = d["map"]
+        state.round = d["round"]
+        state.active_virus = d["active_virus"]
+        return state
 
-    #C'est pour la class Save
-    def getDict(self):
+    def get_saveable_state(self):
         return {
-            "firewall" : self.firewall_player,
+            "firewall_name" : self.firewall_player,
             "firewall_score" : self.firewall_score,
-            "survivor1" : self.survivor1,
-            "s1_score" : self.survivor_1_score,
-            "s1_dead" : self.survivor_1_dead,
-            "survivor2" : self.survivor2,
-            "s2_score" : self.survivor_2_score,
-            "s2_dead" : self.survivor_2_dead,
-            "survivor3" : self.survivor3,
-            "s3_score" : self.survivor_3_score,
-            "s3_dead" : self.survivor_3_dead,
+            "survivor_1": self.survivor_1.get_saveable_state(),
+            "survivor_2": self.survivor_2.get_saveable_state(),
+            "survivor_3": self.survivor_3.get_saveable_state(),
             "nb_kills" : self.nb_kills,
             "gamemode" : self.gamemode,
             "map" : self.map,
@@ -175,8 +144,10 @@ class GameInfo():
             "active_virus" : self.active_virus
         }
 
+
 def announceVirus(game_info):
     print(f"{game_info.getLastVirus()} is active!")
+
 
 def useVirus(game_info):
     virus = []
@@ -196,6 +167,7 @@ def useVirus(game_info):
     
     announceVirus(game_info)
 
+
 def chooseGamemode():
     for e in range (0, len(GAMEMODES)):
         number = e + 1
@@ -208,6 +180,7 @@ def chooseGamemode():
             return choix
         else:
             print("Entrée invalide. Veuillez réessayer.") 
+
 
 def chooseMap():
     for e in range (0, len(MAP)):
@@ -222,6 +195,7 @@ def chooseMap():
         else:
             print("Entrée invalide. Veuillez réessayer.") 
 
+
 def roundStart(roundNumber):
     print("-- Round " + str(roundNumber) + " --")
     print("1...")
@@ -229,57 +203,52 @@ def roundStart(roundNumber):
     print("3...")
     print("GO!")
 
-def allDead(game_info):
-    return game_info.survivor_1_dead and game_info.survivor_2_dead and game_info.survivor_3_dead
 
 def endRound(game_info):
     print("Round ended")
-    if(allDead(game_info)):
+    if(game_info.are_survivors_dead()):
         game_info.firewall_score += 5
     else :
         while True:
             winner = random.randint(1, 3)
-            if(winner == 3 and not game_info.survivor_3_dead):
-                game_info.survivor_3_score += 5
+            if(winner == 3 and not game_info.is_survivor_dead(1)):
+                game_info.survivor_3.score += 5
                 game_info.firewall_score += game_info.nb_kills
                 break
-            elif(winner == 2 and not game_info.survivor_2_dead):
-                game_info.survivor_2_score += 5
+            elif(winner == 2 and not game_info.is_survivor_dead(2)):
+                game_info.survivor_2.score += 5
                 game_info.firewall_score += game_info.nb_kills
                 break
-            elif(winner == 1 and not game_info.survivor_1_dead):
-                game_info.survivor_1_score += 5
+            elif(winner == 1 and not game_info.is_survivor_dead(3)):
+                game_info.survivor_1.score += 5
                 game_info.firewall_score += game_info.nb_kills
                 break
-    game_info.nb_kills = 0
-    game_info.survivor_1_dead = False
-    game_info.survivor_2_dead = False
-    game_info.survivor_3_dead = False
+    game_info.reset_round()
 
 def killPlayer(game_info, player):
     if(player==1):
-        game_info.survivor_1_dead=True
-        print(str(game_info.survivor1) + " est mort.")
+        game_info.survivor_1.is_dead = True
+        print(str(game_info.survivor_1.name) + " est mort.")
     elif(player==2):
-        game_info.survivor_2_dead=True
-        print(str(game_info.survivor2) + " est mort.")
+        game_info.survivor_2.is_dead = True
+        print(str(game_info.survivor_2.name) + " est mort.")
     elif(player==3):
-        game_info.survivor_3_dead=True
-        print(str(game_info.survivor3) + " est mort.")
+        game_info.survivor_3.is_dead = True
+        print(str(game_info.survivor_3.name) + " est mort.")
 
 def spawnObjet(game_info):
     objet = random.randint(0, 3)
     print("L'objet \"" + OBJETS[objet] + "\" s'est glissé dans le code.")
     pickupperNb = random.randint(1,3)
-    if(pickupperNb == 1 and not game_info.survivor_1_dead):
-        print(game_info.survivor1 + " a ramassé : " + OBJETS[objet] + ".")
-        print(game_info.survivor1 + EFFET_OBJETS[objet])
-    elif(pickupperNb == 2 and not game_info.survivor_2_dead):
-        print(game_info.survivor2 + " a ramassé : " + OBJETS[objet] + ".")
-        print(game_info.survivor2 + EFFET_OBJETS[objet])
-    elif(pickupperNb == 3 and not game_info.survivor_3_dead):
-        print(game_info.survivor3 + " a ramassé : " + OBJETS[objet] + ".")
-        print(game_info.survivor3 + EFFET_OBJETS[objet])
+    if(pickupperNb == 1 and not game_info.is_survivor_dead(1)):
+        print(game_info.survivor_1.name + " a ramassé : " + OBJETS[objet] + ".")
+        print(game_info.survivor_1.name + EFFET_OBJETS[objet])
+    elif(pickupperNb == 2 and not game_info.is_survivor_dead(2)):
+        print(game_info.survivor_2.name + " a ramassé : " + OBJETS[objet] + ".")
+        print(game_info.survivor_2.name + EFFET_OBJETS[objet])
+    elif(pickupperNb == 3 and not game_info.is_survivor_dead(3)):
+        print(game_info.survivor_3.name + " a ramassé : " + OBJETS[objet] + ".")
+        print(game_info.survivor_3.name + EFFET_OBJETS[objet])
     else:
         print("Le code indésirable a été effacé.")
 
@@ -292,11 +261,11 @@ def eventSimulation(game_info):
         print("4: Un objet apparaît")
         print("5: Mettre fin à la simulation")
         choix = input("Que ce passe t'il?: ")
-        if(choix == "1" and not game_info.survivor_1_dead):
+        if(choix == "1" and not game_info.is_survivor_dead(1)):
             killPlayer(game_info, 1)
-        elif(choix == "2" and not game_info.survivor_2_dead):
+        elif(choix == "2" and not game_info.is_survivor_dead(2)):
             killPlayer(game_info, 2)
-        elif(choix == "3" and not game_info.survivor_3_dead):
+        elif(choix == "3" and not game_info.is_survivor_dead(3)):
             killPlayer(game_info, 3)
         elif(choix == "4"):
             spawnObjet(game_info)
@@ -304,15 +273,15 @@ def eventSimulation(game_info):
             break
         else:
             print("Entrée invalide. Veuillez réessayer.") 
-        if(allDead(game_info)):
+        if(game_info.are_survivors_dead()):
             print("Tous les survivants sont morts. La manche est finie.")
             break
 
 def endGame(game_info):
     print("Firewall :" + str(game_info.firewall_score))
-    print("Survivor 1 :" + str(game_info.survivor_1_score))
-    print("Survivor 2 :" + str(game_info.survivor_2_score))
-    print("Survivor 3 :" + str(game_info.survivor_3_score))
+    print("Survivor 1 :" + str(game_info.survivor_1.score))
+    print("Survivor 2 :" + str(game_info.survivor_2.score))
+    print("Survivor 3 :" + str(game_info.survivor_3.score))
 
 def round(game_info, round):
     roundStart(round + 1)
@@ -340,9 +309,9 @@ def runGame(game_info):
 def newGame():
     game_info = GameInfo()
     game_info.firewall_player = input("Qui est le Firewall?: ")
-    game_info.survivor1 = input("Qui est le premier survivant?: ")
-    game_info.survivor2 = input("Qui est le second survivant?: ")
-    game_info.survivor3 = input("Qui est le troisieme survivant?: ")
+    game_info.survivor_1 = Survivor(input("Qui est le premier survivant?: "))
+    game_info.survivor_2 = Survivor(input("Qui est le second survivant?: "))
+    game_info.survivor_3 = Survivor(input("Qui est le troisieme survivant?: "))
     game_info.gamemode = chooseGamemode()
     game_info.map = chooseMap()
     return game_info
