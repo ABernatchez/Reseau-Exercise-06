@@ -169,6 +169,7 @@ def useVirus(game_info):
         virus.append(random.randint(0,6))
     
     print(game_info.firewall_player + ", choisie un virus a injecter: ")
+
     is_invalid = True
     while is_invalid:
         print("1 : " + VIRUS[virus[0]])
@@ -192,11 +193,13 @@ def roundStart(roundNumber):
 
 def endRound(game_info):
     print("-- End of round --\n")
+
     if(game_info.are_survivors_dead()):
         game_info.firewall_score += 5
-    else :
+    else:
         game_info.points_for_alive_players(5)
         game_info.firewall_score += game_info.nb_kills
+    
     game_info.reset_round()
 
 
@@ -208,6 +211,7 @@ def killPlayer(game_info, player):
 def spawnObjet(game_info):
     objet = random.randint(0, 3)
     print("L'objet \"" + OBJETS[objet] + "\" s'est glissé dans le code.")
+    
     pickupperNb = random.randint(1,3)
     if(pickupperNb == 1 and not game_info.is_survivor_dead(1)):
         print(game_info.survivor_1.name + " a ramassé : " + OBJETS[objet] + ".")
